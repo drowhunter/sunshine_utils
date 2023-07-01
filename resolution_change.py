@@ -9,6 +9,7 @@ PRESETS = {
     '4k': (3840, 2160),
     '2k': (2560, 1440),
     '1080p': (1920, 1080),
+    '800p': (1280, 800),
     '720p': (1280, 720),
 }
 
@@ -102,9 +103,12 @@ if __name__ == "__main__":
     group.add_argument('-l', '--list-displays', default=False, action="store_true",
                        help='List current displays and exit')
 
-    group.add_argument('--width', type=int, help='Resolution Width', required=False)
-    parser.add_argument('--height', type=int, help='Resolution Height', required=False)
+    group.add_argument('-w', '--width', type=int, help='Resolution Width', required=False)
+    
+    parser.add_argument('-h', '--height', type=int, help='Resolution Height', required=False)
 
+    parser.add_argument('-s', '--size', type=str, help='e.g 1920x1080[x60]',required=False)
+    
     parser.add_argument('--refreshrate', type=int, required=False,
                         help=f'The refresh rate in hertz')
 
@@ -134,7 +138,12 @@ if __name__ == "__main__":
         parser.print_help()
         exit(-1)
     else:
-        if args.width:
+        if args.size:
+            res = args.size.split('x')
+            print("Changing resolution to:")
+            print(res)
+            resolution_changer.change_display(args.display, res[0], res[1], res[2] if len(res) == 3 else args.refreshrate)
+        elif args.width:
             resolution_changer.change_display(args.display, args.width, args.height, args.refreshrate)
         elif args.preset:
             (width, height) = PRESETS.get(args.preset)
