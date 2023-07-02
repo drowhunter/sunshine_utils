@@ -103,17 +103,17 @@ if __name__ == "__main__":
     group.add_argument('-l', '--list-displays', default=False, action="store_true",
                        help='List current displays and exit')
 
-    group.add_argument('-w', '--width', type=int, help='Resolution Width', required=False)
+    group.add_argument('--width', type=int, help='Resolution Width', required=False)
     
-    parser.add_argument('-h', '--height', type=int, help='Resolution Height', required=False)
-
-    parser.add_argument('-s', '--size', type=str, help='e.g 1920x1080[x60]',required=False)
+    parser.add_argument('--height', type=int, help='Resolution Height', required=False)    
     
     parser.add_argument('--refreshrate', type=int, required=False,
                         help=f'The refresh rate in hertz')
 
     parser.add_argument('-d', '--display', default='primary', type=str, required=False,
                         help=r'Which display to use e.g. \\.\DISPLAY1 (defaults to current primary)')
+
+    group.add_argument('-s', '--size', type=str, help='e.g 1920x1080[x60]', required=False)
 
     group.add_argument('-p', '--preset', type=str, required=False,
                        help=f'A preset to use can be one of: {PRESETS.keys()}')
@@ -130,6 +130,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
     resolution_changer = ResolutionChanger()
 
+    if args.size:
+        res = args.size.split('x')
+        print(f"Changing resolution to: {res[0]} x {res[1]} @ {res[2] if len(res) == 3 else None}")
+        args.width = int(res[0])
+        args.height = int(res[1])
+        args.refreshrate = int(res[2]) if len(res) == 3 else args.refreshrate
+
     if args.list_displays:
         resolution_changer.print_display_details()
 
@@ -138,12 +145,7 @@ if __name__ == "__main__":
         parser.print_help()
         exit(-1)
     else:
-        if args.size:
-            res = args.size.split('x')
-            print("Changing resolution to:")
-            print(res)
-            resolution_changer.change_display(args.display, res[0], res[1], res[2] if len(res) == 3 else args.refreshrate)
-        elif args.width:
+        if args.width:
             resolution_changer.change_display(args.display, args.width, args.height, args.refreshrate)
         elif args.preset:
             (width, height) = PRESETS.get(args.preset)

@@ -32,15 +32,16 @@ Changes monitor resolution
 options:
   -h, --help            show this help message and exit
   -l, --list-displays   List current displays and exit
+  -s/--size             e.g 1920x1080x120 
   --width WIDTH         Resolution Width
   --height HEIGHT       Resolution Height
   --refreshrate REFRESHRATE
                         The refresh rate in hertz
   -d DISPLAY, --display DISPLAY
                         Which display to use e.g. \\.\DISPLAY1 (defaults to current primary)
-  -p PRESET, --preset PRESET
+  -p/--preset PRESET
                         A preset to use can be one of: 4k, 2k, 1080p, 720p
-  -r, --reset           Reset the resolution that a previous run has changed
+  -r/--reset           Reset the resolution that a previous run has changed
   --wait WAIT           Time in seconds to wait after changing resolution before exiting
   --debug               Enable debug mode so the program won't exit after running
 ```
